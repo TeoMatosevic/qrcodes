@@ -24,6 +24,8 @@ type Service interface {
 	Count() (int, error)
 
 	AmountByVatin(vatin string) (int, error)
+
+	GetTicket(id string) (Ticket, error)
 }
 
 type service struct {
@@ -127,4 +129,17 @@ func (s *service) AmountByVatin(vatin string) (int, error) {
 	}
 
 	return count, nil
+}
+
+func (s *service) GetTicket(id string) (Ticket, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var ticket Ticket
+	err := s.db.QueryRowContext(ctx, fmt.Sprintf(`SELECT * FROM %s WHERE id = $1`, s.table_name), id).Scan(&ticket.ID, &ticket.Vatin, &ticket.FirstName, &ticket.LastName, &ticket.CreatedAt)
+	if err != nil {
+		return Ticket{}, err
+	}
+
+	return ticket, nil
 }
