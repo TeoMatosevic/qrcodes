@@ -38,7 +38,7 @@ func NewTicket(data TicketData) Ticket {
 
 func (t Ticket) GenerateQRCode() []byte {
 	var png []byte
-	png, err := qrcode.Encode(appURL+"/"+t.ID, qrcode.Medium, 256)
+	png, err := qrcode.Encode(appURL+"/ticket/"+t.ID, qrcode.Medium, 256)
 
 	if err != nil {
 		panic(err)
