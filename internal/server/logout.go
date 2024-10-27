@@ -15,12 +15,7 @@ func (s *Server) LogoutHandler(ctx *gin.Context) {
 		return
 	}
 
-	scheme := "http"
-	if ctx.Request.TLS != nil {
-		scheme = "https"
-	}
-
-	returnTo, err := url.Parse(scheme + "://" + ctx.Request.Host)
+	returnTo, err := url.Parse(os.Getenv("APP_URL"))
 	if err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
